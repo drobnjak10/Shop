@@ -1,0 +1,117 @@
+.navbar {
+    width: 100vw;
+    height: 7vh;
+    background: linear-gradient(90deg, rgb(28, 27, 27) 0%, rgb(26, 23, 23) 100%);
+    display: flex;
+    font-size: 1.2rem;
+    position: sticky;
+    top: 0;
+  }
+  
+  .navbar-container {
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    align-self: center;
+  }
+  
+  .navbar-container > a {
+    text-decoration: none;
+    color: #FFF;
+    font-size: 2.1rem;
+  }
+  
+  .navbar-container .menu-icon {
+    margin-left: auto;
+    display: none;
+    transition: ease 1s all;
+  }
+  
+  .navbar-container .menu-icon .toggle-btn {
+    border: none;
+    font-size: 2.1rem;
+    outline: none;
+    background-color: transparent;
+    color: #fff;
+    margin-top: 5px;
+  }
+  
+  
+  .navbar-container .nav-menu {
+    margin-left: auto;
+    display: flex;
+    height: 100%;
+    align-self: center;
+    transition: all .5s linear;
+  }
+  
+  .navbar-container .nav-menu .nav-links {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.3rem;
+    margin-top: 5px;
+    text-transform: uppercase;
+    margin-left: 50px;
+    transition: all .2s ease;
+  }
+  
+  .navbar-container .nav-menu .nav-item .nav-links:hover {
+    color: #aaa;
+  }
+
+  .navbar-container .nav-menu.active {
+    transform: translateX(0vw);
+  }
+
+  .navbar-container .nav-links-mobile {
+      margin: 0 auto;
+      background-color: red;
+  }
+  
+  @media(max-width:970px) {
+    .navbar {
+      height: 10vh;
+    }
+  
+    .navbar .menu-icon {
+      display: block;
+      transition: ease 1s al;
+    }
+  
+    .navbar-container .nav-menu {
+        display: block;
+        position: absolute;
+        top: 10%;
+        left: 0;
+        transform: translateX(-100vw);
+        height: 90vh;
+        width: 100vw;
+        background-color: #111;
+        transition: all .5s linear;
+    }
+  
+    .navbar-container .nav-menu li.nav-item {
+      width: 100vw;
+      margin: 5px 0;
+      padding: 10px 0;
+      text-align: center;
+      transition: all .3s ease;
+    }
+
+    .navbar-container .nav-menu li.nav-item .nav-links {
+        font-size: 1.8rem;
+    }
+    
+    .navbar-container .nav-menu li.nav-item:hover {
+      background-color: #777;
+    }
+    
+    .navbar-container .nav-menu li.nav-item:hover a{
+      color: #000;
+    }
+    
+    .navbar-container .nav-links-mobile {
+      display: none;
+    }
+    
+  }

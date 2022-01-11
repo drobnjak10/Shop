@@ -1,0 +1,33 @@
+label.title {
+    text-transform: capitalize;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+ul li {
+    margin-top: 10px;
+    font-size: 1rem;
+}
+
+
+.list {
+    display: flex;
+    flex-flow: column;
+}
+
+.list div {
+    margin-top: 10px;
+}
+
+.list div label {
+    margin-left: 15px;
+}
