@@ -40,6 +40,7 @@
   .navbar-container .nav-menu {
     margin-left: auto;
     display: flex;
+    flex-flow: row;
     height: 100%;
     align-self: center;
     transition: all .5s linear;

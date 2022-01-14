@@ -5,7 +5,7 @@ const { isAuth, authorizeRoles } = require('../middlewares/auth');
 const router = new express.Router();
 
 router.post('/create', isAuth, authorizeRoles, create);
-router.get('/', isAuth, getAll);
+router.get('/', getAll);
 // router.post('/login', login);
 // router.get('/all', isAuth, logout);
 

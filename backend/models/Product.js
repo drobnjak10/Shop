@@ -5,7 +5,8 @@ const productSchema = new mongoose.Schema({
     price: { type: Number, required: true },
     category: {
         type: mongoose.Schema.ObjectId,
-        ref: "Subcategory",
+        // ref: "Subcategory",
+        ref: "Category",
         required: true
     },
     sale: { type: String, enum: ['action', 'normal', 'new'], default: 'normal' },
@@ -22,7 +23,7 @@ const productSchema = new mongoose.Schema({
     //     }
     // }],
     avatar: { type: String, required: true }
-});
+}, {timestamps: true});
 
 const Product = mongoose.model('Product', productSchema);
 

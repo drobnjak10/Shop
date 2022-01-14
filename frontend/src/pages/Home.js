@@ -1,136 +1,69 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './Home.css'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
+import { useAppContext } from '../context';
+import Loading from '../component/Loading';
+import Product from '../component/Product';
+import { AuthConsumer } from '../AuthContext';
+import FlashMsg from '../component/FlashMessage';
 
 function Home() {
+    const { products, loading, categories, fetchData, fetchCategories } = useAppContext();
+
+    useEffect(() => {
+        fetchData();
+        fetchCategories()
+    },[])
+
+    if (loading) {
+        return <Loading />
+    }
+
     return (
         <section className="container">
             <div className="row mt-5">
                 <div className="col-lg-3">
                     <aside>
                         <label className='title'>Order By</label>
-                        <ul class="list-group">
+                        <ul className="list-group">
                             <li>Default</li>
                             <li>Poplarity</li>
                             <li>Average Rating</li>
                             <li>Price: low to high</li>
                             <li>Price: high to low</li>
                         </ul>
-                        <label class="title mt-5">Category</label>
+                        <label className="title mt-5">Category</label>
                         <div className="list">
-                            <div>
-                                <input type="radio" name='category' />
-                                <label htmlFor="">All</label>
-                            </div>
-                            <div>
-                                <input type="radio" name='category' />
-                                <label htmlFor="">All</label>
-                            </div>
-                            <div>
-                                <input type="radio" name='category' />
-                                <label htmlFor="">All</label>
-                            </div>
+                            {categories && categories.length > 0 && categories.map(cat => {
+                                const {category} = cat;
+                                return <div key={category._id}>
+                                    <input type="radio" name='category' />
+                                    <label htmlFor="">{category.name}</label>
+                                </div>
+                            })}
                         </div>
                     </aside>
                 </div>
-                {/* <div className="card col-3 ml-4" style={{ width: "18rem" }}>
-                            <Link to="/product">
-                                <img src="ipad.jpg" className="card-img-top" alt="..." style={{ maxWidth: "18rem" }} />
-                                <div className="card-body">
-                                    <h5 className="card-title">Card title</h5>
-                                    <a href="#" className="btn btn-primary">Go somewhere</a>
-                                </div>
-                                <div className="card-footer bg-white">
-                                    <p>560$</p>
-                                </div>
-                            </Link>
-                        </div> */}
                 <div className="col-lg-9 d-flex justify-space-between">
                     <div className="row">
+                        {products.map(product => {
+                            return <Product product={product} key={product._id} />
+                        })}
                         <div className="col-4 mb-3">
-                            <div className="card" style={{width: "18rem"}}>
-                            <Link to="/product">
-                                <img src="ipad.jpg" className="card-img-top" alt="..." style={{ maxWidth: "18rem" }} />
-                                <div className="card-body">
-                                    <h5 className="card-title">Card title</h5>
-                                    <a href="#" className="btn btn-primary">Go somewhere</a>
-                                </div>
-                                <div className="card-footer bg-white">
-                                    <p>560$</p>
-                                </div>
-                            </Link>
+                            <div className="card" style={{ width: "18rem" }}>
+                                <Link to="/product">
+                                    <img src="images/products/ipad.jpg" className="card-img-top" alt="..." style={{ maxWidth: "18rem" }} />
+                                    <div className="card-body">
+                                        <h5 className="card-title">Card title</h5>
+                                        <a href="#" className="btn btn-primary">Go somewhere</a>
+                                    </div>
+                                    <div className="card-footer bg-white">
+                                        <p>560$</p>
+                                    </div>
+                                </Link>
                             </div>
-                        </div>                        
-                        <div className="col-4 mb-3">
-                            <div className="card" style={{width: "18rem"}}>
-                            <Link to="/product">
-                                <img src="ipad.jpg" className="card-img-top" alt="..." style={{ maxWidth: "18rem" }} />
-                                <div className="card-body">
-                                    <h5 className="card-title">Card title</h5>
-                                    <a href="#" className="btn btn-primary">Go somewhere</a>
-                                </div>
-                                <div className="card-footer bg-white">
-                                    <p>560$</p>
-                                </div>
-                            </Link>
-                            </div>
-                        </div>                        
-                        <div className="col-4 mb-3">
-                            <div className="card" style={{width: "18rem"}}>
-                            <Link to="/product">
-                                <img src="ipad.jpg" className="card-img-top" alt="..." style={{ maxWidth: "18rem" }} />
-                                <div className="card-body">
-                                    <h5 className="card-title">Card title</h5>
-                                    <a href="#" className="btn btn-primary">Go somewhere</a>
-                                </div>
-                                <div className="card-footer bg-white">
-                                    <p>560$</p>
-                                </div>
-                            </Link>
-                            </div>
-                        </div>                        
-                        <div className="col-4 mb-3">
-                            <div className="card" style={{width: "18rem"}}>
-                            <Link to="/product">
-                                <img src="ipad.jpg" className="card-img-top" alt="..." style={{ maxWidth: "18rem" }} />
-                                <div className="card-body">
-                                    <h5 className="card-title">Card title</h5>
-                                    <a href="#" className="btn btn-primary">Go somewhere</a>
-                                </div>
-                                <div className="card-footer bg-white">
-                                    <p>560$</p>
-                                </div>
-                            </Link>
-                            </div>
-                        </div>                        
-                        <div className="col-4 mb-3">
-                            <div className="card" style={{width: "18rem"}}>
-                            <Link to="/product">
-                                <img src="ipad.jpg" className="card-img-top" alt="..." style={{ maxWidth: "18rem" }} />
-                                <div className="card-body">
-                                    <h5 className="card-title">Card title</h5>
-                                    <a href="#" className="btn btn-primary">Go somewhere</a>
-                                </div>
-                                <div className="card-footer bg-white">
-                                    <p>560$</p>
-                                </div>
-                            </Link>
-                            </div>
-                        </div>                        
-                        <div className="col-4 mb-3">
-                            <div className="card" style={{width: "18rem"}}>
-                            <Link to="/product">
-                                <img src="ipad.jpg" className="card-img-top" alt="..." style={{ maxWidth: "18rem" }} />
-                                <div className="card-body">
-                                    <h5 className="card-title">Card title</h5>
-                                    <a href="#" className="btn btn-primary">Go somewhere</a>
-                                </div>
-                                <div className="card-footer bg-white">
-                                    <p>560$</p>
-                                </div>
-                            </Link>
-                            </div>
-                        </div>                        
+                        </div>
                     </div>
                 </div>
             </div>

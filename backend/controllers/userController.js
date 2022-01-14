@@ -63,8 +63,21 @@ exports.login = async (req,res) => {
 
 exports.myProfile = async (req,res) => {
     try {
-        const user = await User.findById(req.user._id);
-        res.json({ user: { username: user.username, email: user.email, _id: user._id, role: user.role } });
+        // const user = await User.findById(req.user._id);
+        const user = req.user;
+        console.log('req', req.user);
+        const vreme = new Date(req.user.exp * 1000);
+        // req.json({ 
+        //     user: { 
+        //         username: req.user.username, 
+        //         _id: req.user._id, 
+        //         email: req.user.email, 
+        //         role: req.user.role, 
+        //         exp: vreme
+        //     } 
+        // })
+        console.log(req.user.exp);
+        res.json({ user: { username: user.username, email: user.email, _id: user._id, role: user.role, exp: user.exp } });
     } catch (error) {
         res.json({error:error.message})
     }

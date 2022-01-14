@@ -17,7 +17,6 @@ dotenv.config({
     path: './backend/config/config.env'
 });
 
-const _dirname = path.resolve(path.dirname(''));
 
 
 const cloudinary = require('cloudinary').v2;
@@ -31,9 +30,9 @@ connectDB();
 
 const PORT = process.env.PORT;
 
-console.log(__dirname);
 
-app.use(express.static(path.join(_dirname,'../front/public/images')));
+app.use(express.static(path.join(__dirname,'../frontend/public/images')));
+console.log('app', __dirname)
 app.use(express.json());
 // app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true }));

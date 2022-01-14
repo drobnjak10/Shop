@@ -14,12 +14,9 @@ exports.isAuth = async (req, res, next) => {
             return res.json({ error: "Please login to access." });
         }
 
-   
-
         const decoded = await jwt.verify(token, process.env.JWT_SECRET);
 
-
-        req.user = { _id: decoded._id, username: decoded.username, role: decoded.role }
+        req.user = { _id: decoded._id, username: decoded.username, role: decoded.role, email: decoded.email, exp: decoded.exp }
 
         next();
     } catch (error) {
