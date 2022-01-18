@@ -9,11 +9,41 @@ import { AuthConsumer } from '../AuthContext';
 import FlashMsg from '../component/FlashMessage';
 
 function Home() {
-    const { products, loading, categories, fetchData, fetchCategories } = useAppContext();
+    const { cart } = useAppContext();
+    const [products, setProducts] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        fetchData();
-        fetchCategories()
+        const getProducts = async () => {
+            setLoading(true)
+            try {
+                const {data} = await axios.get('http://localhost:5000/api/product');
+                setProducts(data.products);
+                setLoading(false)
+            } catch (error) {
+                setError(error.message);
+                setLoading(false)
+            }
+        }
+        getProducts();
+    },[])
+    
+
+    useEffect(() => {
+        const getCategories = async () => {
+            setLoading(true)
+            try {
+                const {data} = await axios.get('http://localhost:5000/api/category');
+                setCategories(data.categories)
+                setLoading(false)
+            } catch (error) {
+                setError(error.message);
+                setLoading(false)
+            }
+        }
+        getCategories()
     },[])
 
     if (loading) {
@@ -25,6 +55,7 @@ function Home() {
             <div className="row mt-5">
                 <div className="col-lg-3">
                     <aside>
+                        {error ? <div className="alert alert-danger">{error}</div> : '' }
                         <label className='title'>Order By</label>
                         <ul className="list-group">
                             <li>Default</li>
@@ -50,7 +81,7 @@ function Home() {
                         {products.map(product => {
                             return <Product product={product} key={product._id} />
                         })}
-                        <div className="col-4 mb-3">
+                        {/* <div className="col-4 mb-3">
                             <div className="card" style={{ width: "18rem" }}>
                                 <Link to="/product">
                                     <img src="images/products/ipad.jpg" className="card-img-top" alt="..." style={{ maxWidth: "18rem" }} />
@@ -63,7 +94,7 @@ function Home() {
                                     </div>
                                 </Link>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>

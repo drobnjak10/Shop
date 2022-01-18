@@ -7,6 +7,7 @@ import { AppProvider } from './context';
 import { AuthProvider } from './AuthContext';
 import { positions, transitions, Provider as AlertProvider } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic'
+import { CartProvider } from './CartContext';
 
 const options = {
   timeout: 5000,
@@ -18,7 +19,9 @@ ReactDOM.render(
     <AlertProvider template={AlertTemplate} {...options}>
       <AuthProvider>
         <AppProvider>
-          <App />
+          <CartProvider>
+            <App />
+          </CartProvider>
         </AppProvider>
       </AuthProvider>
     </AlertProvider>,  

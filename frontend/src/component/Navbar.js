@@ -5,11 +5,12 @@ import { FaBars, FaUserAlt } from 'react-icons/fa'
 import { AiOutlineClose, AiOutlineLogin, AiOutlineLogout, AiOutlineShoppingCart } from 'react-icons/ai'
 import './Navbar.css'
 import { AuthConsumer } from '../AuthContext'
+import { useCartContext } from '../CartContext'
 
 const Navbar = () => {
     const [click, setClick] = useState(false);
     const { authed, logout } = AuthConsumer();
-    const navigate = useNavigate();
+    const {cart} = useCartContext();
 
     const handleClick = (e) => {
         e.preventDefault();
@@ -35,8 +36,8 @@ const Navbar = () => {
                     </li>
                     */}
                     <li className="nav-item">
-                        <Link to="/products" className='nav-links'>
-                            <span><AiOutlineShoppingCart /></span>
+                        <Link to="/cart" className='nav-links'>
+                            <span><AiOutlineShoppingCart /> { cart && cart.length }</span>
                         </Link>
                     </li>
                     <li className="nav-item">

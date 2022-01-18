@@ -10,7 +10,7 @@ const initialState = {
 }
 
 export const AuthProvider = ({ children }) => {
-    const [authed, setAuthed] = useState(true);
+    const [authed, setAuthed] = useState(false);
     const [state, dispatch] = useReducer(userReducer, initialState);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
@@ -116,7 +116,7 @@ export const AuthProvider = ({ children }) => {
             setAuthed(false)
             return;
         }
-    }, [authed])
+    }, [])
 
     useEffect(() => {
         if(user && user.role === 'admin') {

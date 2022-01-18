@@ -1,14 +1,12 @@
 import { createContext, useContext, useEffect, useReducer, useState } from "react";
 import axios from 'axios'
 import Cookies from "universal-cookie";
-import { productReducer } from "./reducers";
+import { cartReducer, productReducer } from "./reducers";
 
 const AppContext = createContext();
 
 const initialState = {
-    user: {},
-    loading: true,
-    error: false
+    cart: localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : []
 }
 
 export const AppProvider = ({children}) => {
@@ -21,45 +19,68 @@ export const AppProvider = ({children}) => {
     const [success, setSuccess] = useState(false);
     const [product, setProduct] = useState(null);
     
-    const fetchData = async () => {
-        setLoading(true);
 
-        try {
-            const {data} = await axios.get('http://localhost:5000/api/product');
-            if(data.error) {
-                setError(data.error)
-                setLoading(false);
-                return;
-            } else {
-                setProducts(data.products);
-                setLoading(false);
-            }
-            setLoading(false);
-        } catch (error) {
-            // setError(error.message);
-            console.log(error)
-            setError(true);
-            setLoading(false);
-        }
-    }
+    // const [state, dispatch] = useReducer(cartReducer, initialState);
 
-    const fetchCategories = async () => {
-        setLoading(true)
-        try {
-            const {data} = await axios.get('http://localhost:5000/api/category')
-            if(data.error) {
-                setError(true)
-                setMessage(data.error)
-            } else {
-                setCategories(data.categories);
-            }
-            setLoading(false);
-        } catch (error) {
-            setMessage(error.message)
-            setError(true);
-            setLoading(false);
-        }
-    }
+    // const addToCart = async (id, qty) => {
+    //     setLoading(true);
+    //     try {
+    //         const {data} = await axios.get(`http://localhost:5000/api/product/${id}`)
+    //         const item = {
+    //             name: data.product.name,
+    //             productId: data.product._id,
+    //             avatar: data.product.avatar,
+    //             price: data.product.price,
+    //             stock: data.product.stock,
+    //             qty
+    //         }
+    //         dispatch({ type: 'CART_ADD_ITEM', payload:item});
+    //         setLoading(false)
+    //     } catch (error) {
+    //         setError(true)
+    //         setLoading(false)
+    //     }
+    // }
+    
+    // const fetchData = async () => {
+    //     setLoading(true);
+
+    //     try {
+    //         const {data} = await axios.get('http://localhost:5000/api/product');
+    //         if(data.error) {
+    //             setError(data.error)
+    //             setLoading(false);
+    //             return;
+    //         } else {
+    //             setProducts(data.products);
+    //             setLoading(false);
+    //         }
+    //         setLoading(false);
+    //     } catch (error) {
+    //         // setError(error.message);
+    //         console.log(error)
+    //         setError(true);
+    //         setLoading(false);
+    //     }
+    // }
+
+    // const fetchCategories = async () => {
+    //     setLoading(true)
+    //     try {
+    //         const {data} = await axios.get('http://localhost:5000/api/category')
+    //         if(data.error) {
+    //             setError(true)
+    //             setMessage(data.error)
+    //         } else {
+    //             setCategories(data.categories);
+    //         }
+    //         setLoading(false);
+    //     } catch (error) {
+    //         setMessage(error.message)
+    //         setError(true);
+    //         setLoading(false);
+    //     }
+    // }
 
     const addProduct = async (formData) => {
         setLoading(true);
@@ -127,6 +148,10 @@ export const AppProvider = ({children}) => {
     // useEffect(() => {
     //     fetchCategories();
     // }, [])
+
+    // useEffect(() => {
+    //     localStorage.setItem('cart', JSON.stringify(state.cart));
+    // }, [state.cart])
     
     
     return <AppContext.Provider value={{ 
@@ -138,9 +163,11 @@ export const AppProvider = ({children}) => {
         message,
         product,
         addProduct,
-        fetchCategories,
-        fetchData,
+        // fetchCategories,
+        // fetchData,
         getProduct,
+        // ...state,
+        // addToCart
         }}>
         {children}
     </AppContext.Provider>

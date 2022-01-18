@@ -8,10 +8,11 @@ import Dashboard from './pages/Dashboard';
 import NewProduct from './pages/DashboardMenu/NewProduct';
 import {useAlert} from 'react-alert'
 import ProductDetails from './pages/ProductDetails';
+import Cart from './pages/Cart';
 
 function App() {
   const { authed, admin } = AuthConsumer();
-  
+  console.log(authed)
 
   return (
     <Router>
@@ -19,6 +20,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/product/:id" element={<ProductDetails />} />
+        <Route path="/cart" element={<Cart />} />
         <Route path="/dashboard" element={authed ? <Dashboard /> : <Navigate to="/signin" />} />
         {/* <Route path="/dashboard" element={<Dashboard />} /> */}
         {/* <Route path="/dashboard/new" element={authed ? <NewProduct /> : <Navigate to="/signin" />} /> */}

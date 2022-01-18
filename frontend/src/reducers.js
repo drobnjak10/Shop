@@ -31,3 +31,27 @@ export const productReducer = (state = { loading: true, product: {}, error: fals
             return state;
     }
 }
+
+export const cartReducer = (state, action) => {
+    switch(action.type) {
+        case "CART_ADD_ITEM":
+            const item = action.payload;
+            const existItem = state.cart.find(x => x.productId === item.productId);
+            if (existItem) {
+                return {
+                    ...state,
+                    cart: state.cart.map(x => x.productId === existItem.productId ? item : x)
+                }
+            } else {
+                return { ...state, cart: [...state.cart, item] };
+            }
+        case "CART_REMOVE_ITEM":
+            console.log('dispatch', action.payload)
+            return {
+                ...state,
+                cart: state.cart.filter(item => item.productId !== action.payload)
+            };
+        default:
+            return state;
+    }
+}
