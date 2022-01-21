@@ -102,6 +102,7 @@ export const AppProvider = ({ children }) => {
                 }
             });
 
+
             console.log(data)
 
             if (data.error) {
@@ -123,7 +124,6 @@ export const AppProvider = ({ children }) => {
 
 
     const getProduct = async (id) => {
-        setLoading(true);
         try {
             const { data } = await axios.get(`http://localhost:5000/api/product/${id}`);
 
@@ -170,6 +170,35 @@ export const AppProvider = ({ children }) => {
         }
     }
 
+    const editProduct = async (formData) => {
+        try {
+            console.log(formData)
+            const { data } = await axios.patch(`http://localhost:5000/api/product/edit`, formData, {
+                headers: {
+                    Authorization: `Bearer ${cookie.get('access_token')}`
+                }
+            });
+            if(data.error) {
+                setError(data.message);
+                return;
+            }
+            setMessage(data.message);
+        } catch (error) {
+            
+        }
+    }
+
+    const getCategories = async () => {
+        try {
+            const { data } = await axios.get('http://localhost:5000/api/category');
+            setCategories(data.categories)
+            setLoading(false)
+        } catch (error) {
+            setError(error.message);
+            setLoading(false)
+        }
+    }
+
     // useEffect(() => {
     //     fetchData();
     // }, [])
@@ -196,6 +225,8 @@ export const AppProvider = ({ children }) => {
         getProduct,
         getProducts,
         removeProduct,
+        editProduct,
+        getCategories,
         ...state
         // ...state,
         // addToCart

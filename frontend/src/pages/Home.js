@@ -11,32 +11,20 @@ import { useCartContext } from '../CartContext';
 
 function Home() {
     const { cart } = useAppContext();
-    const [categories, setCategories] = useState([]);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const { message } = useCartContext();
-    const {products, getProducts} = useAppContext(); 
+    const {products, getProducts, getCategories, categories} = useAppContext(); 
 
 
     useEffect(() => {
         getProducts();
+        getCategories()
     }, [])
 
 
     useEffect(() => {
-        const getCategories = async () => {
-            setLoading(true)
-            try {
-                const { data } = await axios.get('http://localhost:5000/api/category');
-                setCategories(data.categories)
-                setLoading(false)
-            } catch (error) {
-                setError(error.message);
-                setLoading(false)
-            }
-        }
-        getCategories()
-    }, [products])
+    }, [])
 
 
 

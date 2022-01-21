@@ -1,5 +1,5 @@
 const express = require('express');
-const { create, getOne, getAll, deleteOne } = require('../controllers/productController');
+const { create, getOne, getAll, deleteOne, editOne } = require('../controllers/productController');
 const { isAuth, authorizeRoles } = require('../middlewares/auth');
 const multer = require('multer');
 const path = require('path')
@@ -45,5 +45,6 @@ router.post('/create', isAuth, authorizeRoles,  create);
 router.get('/', getAll);
 router.get('/:id', getOne);
 router.delete('/:id', isAuth, authorizeRoles, deleteOne);
+router.patch('/edit', isAuth, authorizeRoles, editOne)
 
 module.exports = router;

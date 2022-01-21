@@ -12,10 +12,15 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import PaymentMethod from './pages/PaymentMethod';
 import PlaceOrder from './pages/PlaceOrder';
+import EditProduct from './pages/DashboardMenu/EditProduct';
+import { useEffect } from 'react';
 
 function App() {
   const { authed, isAdmin } = AuthConsumer();
 
+
+  console.log(isAdmin);
+  
   return (
     <Router>
       <Navbar />
@@ -24,6 +29,7 @@ function App() {
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/dashboard" element={authed ? <Dashboard /> : <Navigate to="/signin" />} />
+        <Route path="/dashboard/edit/:id" element={authed ? <EditProduct /> : <Navigate to="/signin" />} />
         {/* <Route path="/dashboard" element={<Dashboard />} /> */}
         {/* <Route path="/dashboard/new" element={authed ? <NewProduct /> : <Navigate to="/signin" />} /> */}
         <Route path="/dashboard/new" element={authed ? <NewProduct /> : <Navigate to="/" />} />

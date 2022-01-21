@@ -2,6 +2,7 @@ const Product = require("../models/Product");
 const multer = require('multer');
 const path = require("path");
 const _dirname = path.resolve(path.dirname(''));
+const fs = require('fs')
 // const upload = multer({
 //     // dest:'avatars',
 //     limits: {
@@ -105,15 +106,15 @@ exports.create = async (req, res) => {
             product.description = req.body.description
             product.category = req.body.category
             product.avatar = req.file.filename
-    
+
             const savedProduct = await product.save();
-    
+
             if (!savedProduct) {
                 fs.unlinkSync(req.file.filepath);
             }
-    
+
             console.log(savedProduct);
-    
+
             res.json({ message: "Product successfully created.", savedProduct })
         });
     } catch (error) {
@@ -141,14 +142,65 @@ exports.getAll = async (req, res) => {
     }
 }
 
-exports.deleteOne = async (req,res) => {
+exports.deleteOne = async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
 
-        await product.delete()
+        const putanja = path.join(__dirname, '../../frontend/public/images/products');
+        console.log(putanja)
+
+        await product.delete();
+
+        fs.unlinkSync(`${putanja}/${product.avatar}`);
 
         res.json({ message: 'Product deleted.', product })
     } catch (error) {
-        res.json({error: error.message});
+        res.json({ error: error.message });
+    }
+}
+
+
+exports.editOne = async (req, res) => {
+    try {
+
+        upload(req, res, async function (err) {
+            let greska;
+            if (err instanceof multer.MulterError) {
+                // A Multer error occurred when uploading.
+                console.log('err1', err);
+                res.json({ error: err.message })
+                return;
+            } else if (err) {
+                // An unknown error occurred when uploading.
+                console.log(JSON.stringify(err.message));
+                greska = err.message;
+                res.json({ error: err.message })
+                return;
+            }
+
+            const oldProduct = await Product.findById(req.body._id);
+
+            const putanja = path.join(__dirname, '../../frontend/public/images/products');
+
+            
+            
+            console.log(req.file);
+            const avatarPath = req.file ? req.file.filename : req.body.avatar
+            const product = await Product.findByIdAndUpdate(req.body._id, { 
+                name : req.body.name,
+                price : req.body.price,
+                stock : req.body.stock,
+                description : req.body.description,
+                category : req.body.category,
+                avatar : avatarPath}, {new: true});
+                
+                console.log(product)
+                await product.save();
+                fs.unlinkSync(`${putanja}/${oldProduct.avatar}`);
+
+            res.json({ message: "Edited successfully", product })
+        });
+    } catch (error) {
+        res.json({ error: error.message })
     }
 }

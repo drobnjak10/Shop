@@ -19,9 +19,13 @@ export const AuthProvider = ({ children }) => {
     const [error, setError] = useState(false);
     const [message, setMessage] = useState(false)
     const [success, setSuccess] = useState(false);
-    const [isAdmin, setIsAdmin] = useState(false);
     const [user, setUser] = useState({});
+    const [isAdmin, setIsAdmin] = useState(false); 
+    // const [state, dispatch] = useReducer(userReducer, initialState)
 
+    
+ 
+    
     const getUserInfo = async () => {
         // setLoading(true);
         try {
@@ -40,6 +44,11 @@ export const AuthProvider = ({ children }) => {
                     exp: data.user.exp
                 }
             });
+
+            if(data.user.role === 'admin') {
+                setIsAdmin(true);
+            }
+
             setUser(data.user);
             setAuthed(true);
             setLoading(false);
@@ -48,6 +57,8 @@ export const AuthProvider = ({ children }) => {
             setAuthed(false)
         }
     }
+
+
 
     const login = async (email, password) => {
         setLoading(true);
@@ -96,15 +107,22 @@ export const AuthProvider = ({ children }) => {
             setLoading(false)
             setAuthed(false)
             setIsAdmin(false);
-            setUser({})
-            document.location.reload('/')
+            // document.location.reload('/')
         } catch (error) {
             setError(error.message);
             setAuthed(false)
         }
     }
 
+    useEffect(() => {
+        console.log(state, 'state')
+        if(authed && state.user && state.user.role === 'admin') {
+            setIsAdmin(true)
+        } else {
+            setIsAdmin(false)
+        }
 
+    }, [isAdmin, state, authed])
 
     useEffect(() => {
         if (!cookies.get('access_token')) {
@@ -125,17 +143,18 @@ export const AuthProvider = ({ children }) => {
     }, [])
 
     useEffect(() => {
-        if (user && user.role === 'admin') {
+        if (authed && state.user && state.user.role === 'admin') {
             setIsAdmin(true);
         }
-    }, [user])
+        console.log(state)
+    }, [state.user])
 
     useEffect(() => {
         const datum = Date.now() / 1000;
         if (state.user && state.user.exp && state.user.exp < datum) {
             logout();
         }
-    }, [state])
+    }, [state.user])
 
     return <AuthContext.Provider value={{
         login,
@@ -145,7 +164,7 @@ export const AuthProvider = ({ children }) => {
         isAdmin,
         logout,
         success,
-        message
+        message,
     }}>
         {children}
     </AuthContext.Provider>

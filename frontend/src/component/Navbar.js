@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { FiShoppingBag } from 'react-icons/fi'
 import { FaBars, FaUserAlt } from 'react-icons/fa'
@@ -9,13 +9,15 @@ import { useCartContext } from '../CartContext'
 
 const Navbar = () => {
     const [click, setClick] = useState(false);
-    const { authed, logout } = AuthConsumer();
+    const { authed, logout,  } = AuthConsumer();
     const {cart} = useCartContext();
 
     const handleClick = (e) => {
         e.preventDefault();
         logout();
     }
+
+
 
     return <nav className="navbar">
         <div className="navbar-container">

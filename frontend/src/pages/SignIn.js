@@ -7,13 +7,17 @@ import Loading from '../component/Loading'
 function SignIn() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { login, loading, error, success, message } = AuthConsumer();
+    const [success, setSuccess] = useState(false)
+    const { login, loading, error, message } = AuthConsumer();
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
         login(email, password);
-        navigate('/')
+        setSuccess(true);
+        setTimeout(() => {
+            navigate('/')
+        }, 2000)
     }
 
     if(loading) {
@@ -25,7 +29,7 @@ function SignIn() {
             <div className="row d-flex justify-content-center align-items-center" style={{ height: '80vh' }}>
                 <div className="col-6">
                     {error &&  <FlashMsg type={'danger'} msg={message} />}
-                    { success && <FlashMsg type={'success'} msg={message} />}
+                    { success && <FlashMsg type={'success'} msg={`${message }'You will be redirected.'`} />}
                     <form onSubmit={handleSubmit}>
                         <div className="mb-3">
                             <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>

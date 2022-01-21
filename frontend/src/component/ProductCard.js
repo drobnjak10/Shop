@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { MdDangerous } from 'react-icons/md';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { AuthConsumer } from '../AuthContext';
 import { useAppContext } from '../context';
 
@@ -44,7 +44,7 @@ function ProductCard({ product }) {
                     </div>
                     <button className="btn btn-primary rounded">Add To Cart</button>
                    { isAdmin &&  <div className="card-footer mt-5">
-                        <button className="btn btn-warning rounded me-2">Edit</button>
+                        <Link to={`/dashboard/edit/${_id}`} className="btn btn-warning rounded me-2">Edit</Link>
                         <button className="btn btn-danger rounded" onClick={removeHandler}>Delete</button>
                     </div> }
                 </div>

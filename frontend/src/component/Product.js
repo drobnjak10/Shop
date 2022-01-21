@@ -6,8 +6,7 @@ import Loading from './Loading';
 
 function Product({product}) {
     const {_id, name, avatar, price} = product;
-    // const {cart, addToCart} = useAppContext()
-    const {addToCart, loading} = useCartContext();
+    const {addToCart} = useCartContext();
 
     
     
