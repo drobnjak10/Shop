@@ -9,6 +9,9 @@ import NewProduct from './pages/DashboardMenu/NewProduct';
 import {useAlert} from 'react-alert'
 import ProductDetails from './pages/ProductDetails';
 import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
+import PaymentMethod from './pages/PaymentMethod';
+import PlaceOrder from './pages/PlaceOrder';
 
 function App() {
   const { authed, admin } = AuthConsumer();
@@ -26,6 +29,9 @@ function App() {
         {/* <Route path="/dashboard/new" element={authed ? <NewProduct /> : <Navigate to="/signin" />} /> */}
         <Route path="/dashboard/new" element={authed ? <NewProduct /> : <Navigate to="/" />} />
         <Route path="/signin" element={authed ? <Navigate to="/" /> : <SignIn />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/payment" element={<PaymentMethod />} />
+        <Route path="/placeorder" element={<PlaceOrder />} />
       </Routes>
     </Router>
   );

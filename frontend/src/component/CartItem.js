@@ -1,24 +1,22 @@
 import React, { useState } from 'react'
 import { useCartContext } from '../CartContext';
 import Loading from '../component/Loading';
+import { productReducer } from '../reducers';
 
 function CartItem({item}) { 
-    const [qty, setQty] = useState(1);
-    const {removeFromCart, loading, error} = useCartContext();
+    const [qty, setQty] = useState(item.qty);
+    const {removeFromCart, loading, error, addToCart} = useCartContext();
 
    
-    console.log(item)
+    console.log(qty)
     
-    const onChangeHandler = () => {
-        console.log('')
+    const onChangeHandler = (e) => {
+        setQty(Number(e.target.value));
+        addToCart(item.productId, Number(e.target.value));
     }
 
-    if(loading) {
-        return <Loading />
-    }
-    
-    
     return (
+       <>
         <tr>
             <td style={{ width: '30%' }}>
                 <img
@@ -26,7 +24,7 @@ function CartItem({item}) {
                     alt="" className='img-fluid' style={{ maxWidth: '50%', width: '50%' }} />
             </td>
             <td>{item.name}</td>
-            <td>$800</td>
+            <td>${item.price}</td>
             <td>
                 {/* <select value={qty} className="quantity" onChange={onChangeHandler}>
                                         {
@@ -35,7 +33,7 @@ function CartItem({item}) {
                                             ))
                                         }
                                     </select> */}
-                <select name="" id="">
+                <select name="" id="" value={qty} onChange={onChangeHandler}>
                     { 
                         [...Array(item.stock).keys()].map((x, index) => {
                             return <option value={x + 1} key={x + 1}>
@@ -45,9 +43,15 @@ function CartItem({item}) {
                     }
                 </select>
             </td>
-            <td>$800</td>
+            <td>
+                ${item.price * qty}
+            </td>
             <td> <button className="btn btn-danger" onClick={() => removeFromCart(item.productId)}>Remove</button> </td>
         </tr>
+        {/* <tr>
+            <td>Total amount: </td>
+        </tr> */}
+       </>
     )
 }
 

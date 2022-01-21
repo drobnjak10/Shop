@@ -7,6 +7,7 @@ import Loading from '../component/Loading';
 import Product from '../component/Product';
 import { AuthConsumer } from '../AuthContext';
 import FlashMsg from '../component/FlashMessage';
+import { useCartContext } from '../CartContext';
 
 function Home() {
     const { cart } = useAppContext();
@@ -14,6 +15,8 @@ function Home() {
     const [categories, setCategories] = useState([]);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const {message} = useCartContext();
+
 
     useEffect(() => {
         const getProducts = async () => {
@@ -46,6 +49,8 @@ function Home() {
         getCategories()
     },[])
 
+    
+
     if (loading) {
         return <Loading />
     }
@@ -53,6 +58,7 @@ function Home() {
     return (
         <section className="container">
             <div className="row mt-5">
+                { message && <FlashMsg type={'success'} msg={message} /> }
                 <div className="col-lg-3">
                     <aside>
                         {error ? <div className="alert alert-danger">{error}</div> : '' }

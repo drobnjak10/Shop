@@ -89,6 +89,7 @@ export const AuthProvider = ({ children }) => {
                 return;
             }
             dispatch({ type: "USER_LOGOUT" });
+            dispatch({ type: 'CART_RESET_ALL' });
             setLoading(false)
             cookies.remove('access_token');
             setAuthed(false)
