@@ -15,7 +15,6 @@ import PlaceOrder from './pages/PlaceOrder';
 
 function App() {
   const { authed, admin } = AuthConsumer();
-  console.log(authed)
 
   return (
     <Router>

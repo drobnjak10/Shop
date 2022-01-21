@@ -15,14 +15,14 @@ function Home() {
     const [categories, setCategories] = useState([]);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const {message} = useCartContext();
+    const { message } = useCartContext();
 
 
     useEffect(() => {
         const getProducts = async () => {
             setLoading(true)
             try {
-                const {data} = await axios.get('http://localhost:5000/api/product');
+                const { data } = await axios.get('http://localhost:5000/api/product');
                 setProducts(data.products);
                 setLoading(false)
             } catch (error) {
@@ -31,14 +31,14 @@ function Home() {
             }
         }
         getProducts();
-    },[])
-    
+    }, [])
+
 
     useEffect(() => {
         const getCategories = async () => {
             setLoading(true)
             try {
-                const {data} = await axios.get('http://localhost:5000/api/category');
+                const { data } = await axios.get('http://localhost:5000/api/category');
                 setCategories(data.categories)
                 setLoading(false)
             } catch (error) {
@@ -47,9 +47,9 @@ function Home() {
             }
         }
         getCategories()
-    },[])
+    }, [])
 
-    
+
 
     if (loading) {
         return <Loading />
@@ -58,10 +58,10 @@ function Home() {
     return (
         <section className="container">
             <div className="row mt-5">
-                { message && <FlashMsg type={'success'} msg={message} /> }
+                {message && <FlashMsg type={'success'} msg={message} />}
                 <div className="col-lg-3">
                     <aside>
-                        {error ? <div className="alert alert-danger">{error}</div> : '' }
+                        {error ? <div className="alert alert-danger">{error}</div> : ''}
                         <label className='title'>Order By</label>
                         <ul className="list-group">
                             <li>Default</li>
@@ -73,7 +73,7 @@ function Home() {
                         <label className="title mt-5">Category</label>
                         <div className="list">
                             {categories && categories.length > 0 && categories.map(cat => {
-                                const {category} = cat;
+                                const { category } = cat;
                                 return <div key={category._id}>
                                     <input type="radio" name='category' />
                                     <label htmlFor="">{category.name}</label>

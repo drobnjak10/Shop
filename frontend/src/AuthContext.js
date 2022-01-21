@@ -10,7 +10,10 @@ const initialState = {
 }
 
 export const AuthProvider = ({ children }) => {
-    const [authed, setAuthed] = useState(false);
+    const cookies = new Cookies();
+    const [authed, setAuthed] = useState(() => {
+        return cookies.get('access_token') ? true : false
+    });
     const [state, dispatch] = useReducer(userReducer, initialState);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
@@ -18,7 +21,6 @@ export const AuthProvider = ({ children }) => {
     const [success, setSuccess] = useState(false);
     const [admin, setAdmin] = useState(false);
     const [user, setUser] = useState({});
-    const cookies = new Cookies();
 
     const getUserInfo = async () => {
         setLoading(true);
