@@ -5,7 +5,7 @@ import { useAppContext } from '../context'
 import {Link, Navigate, useNavigate} from 'react-router-dom'
 
 function Cart() {
-    const {cart} = useCartContext();
+    const {cart, clearCart} = useCartContext();
     const total = cart.reduce((a,c) => a + c.price * c.qty, 0)
     const navigate = useNavigate()
 
@@ -49,7 +49,7 @@ function Cart() {
                    Total amount: ${cart.reduce((a, c) => a + c.price * c.qty, 0) }
                 </div>
                 <button className="btn btn-primary form-control" onClick={handleClick}>Checkout</button>
-                <button className="btn btn-danger form-control mt-3">Clear cart</button>
+                <button className="btn btn-danger form-control mt-3" onClick={clearCart}>Clear cart</button>
                
             </section>
         </div>

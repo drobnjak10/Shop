@@ -3,6 +3,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom'
 import Sidebar from '../../component/User/Sidebar';
 import { useAppContext } from '../../context';
 import Loading from '../../component/Loading';
+import axios from 'axios';
 
 function NewProduct() {
     const [name, setName] = useState('');
@@ -12,12 +13,14 @@ function NewProduct() {
     const [avatar, setAvatar] = useState('');
     const [category, setCategory] = useState('');
     const [sale, setSale] = useState('');
-    const { categories, loading, error, message, addProduct, success } = useAppContext();
+    const [loading, setLoading] = useState(false);
+    const [categories, setCategories] = useState([]);
+    const [error, setError] = useState(false)
+    const { message, addProduct, success, error: creatError } = useAppContext();
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-     
 
         const formData = new FormData();
         formData.set('name', name)
@@ -34,10 +37,25 @@ function NewProduct() {
         setCategory(e.target.value)
     }
 
+    useEffect(() => {
+        const getCategories = async () => {
+            setLoading(true)
+            try {
+                const { data } = await axios.get('http://localhost:5000/api/category');
+                setCategories(data.categories)
+                setLoading(false)
+            } catch (error) {
+                setError(error.message);
+                setLoading(false)
+            }
+        }
+        getCategories()
+    },[])
 
-    if(loading) {
-        return <Loading />
-    }
+
+    // if(loading) {
+    //     return <Loading />
+    // }
 
     if(success) {
         console.log(success)
@@ -53,7 +71,7 @@ function NewProduct() {
                     <div className="container mt-3">
                         <div className="row d-flex justify-content-center align-items-center" >
                             <div className="col-6 text-white">
-                                {error && <div className="alert alert-danger">{message}</div> }
+                                {creatError && <div className="alert alert-danger">{message}</div> }
                                 {success && <div className="alert alert-success">{message}</div> }
                                 <form onSubmit={handleSubmit} >
                                     <div className="mb-3">

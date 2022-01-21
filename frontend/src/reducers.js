@@ -19,13 +19,20 @@ export const productReducer = (state = { loading: true, product: {}, error: fals
     switch(action.type) {
         case 'ADD_NEW_PRODUCT':
             const product = action.payload;
-            console.log(product);
             return {
                 loading: false, product: action.payload
             };
         case 'ADD_PRODUCT_FAIL':
             return {
                 loading: false, error: action.payload
+            };
+        case 'GET_PRODUCTS':
+            return {
+                products: action.payload, loading: false
+            }
+        case 'REMOVE_ITEM':
+            return {
+                message: action.payload
             }
         default:
             return state;
@@ -46,7 +53,6 @@ export const cartReducer = (state, action) => {
                 return { ...state, cart: [...state.cart, item] };
             }
         case "CART_REMOVE_ITEM":
-            console.log('dispatch', action.payload)
             return {
                 ...state,
                 cart: state.cart.filter(item => item.productId !== action.payload)

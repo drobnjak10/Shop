@@ -1,24 +1,24 @@
 import { createContext, useContext, useEffect, useReducer, useState } from "react";
 import axios from 'axios'
 import Cookies from "universal-cookie";
-import { cartReducer, productReducer } from "./reducers";
+import { cartReducer, productReducer, userReducer } from "./reducers";
 
 const AppContext = createContext();
 
 const initialState = {
-    cart: localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : []
+    products: []
 }
 
-export const AppProvider = ({children}) => {
+export const AppProvider = ({ children }) => {
     const [loading, setLoading] = useState(false)
-    const [products, setProducts] = useState([]);
     const [error, setError] = useState(false);
     const [categories, setCategories] = useState([]);
     const [message, setMessage] = useState('');
     const cookie = new Cookies();
     const [success, setSuccess] = useState(false);
     const [product, setProduct] = useState(null);
-    
+    const [state, dispatch] = useReducer(productReducer, initialState);
+
 
     // const [state, dispatch] = useReducer(cartReducer, initialState);
 
@@ -41,7 +41,7 @@ export const AppProvider = ({children}) => {
     //         setLoading(false)
     //     }
     // }
-    
+
     // const fetchData = async () => {
     //     setLoading(true);
 
@@ -82,18 +82,29 @@ export const AppProvider = ({children}) => {
     //     }
     // }
 
+    const getProducts = async () => {
+        try {
+            const { data } = await axios.get('http://localhost:5000/api/product');
+            dispatch({ type: 'GET_PRODUCTS', payload: data.products });
+        } catch (error) {
+            setError(error.message);
+        }
+    }
+
     const addProduct = async (formData) => {
         setLoading(true);
         setError(false);
         setSuccess(false);
         try {
-            const {data} = await axios.post('http://localhost:5000/api/product/create', formData, {
+            const { data } = await axios.post('http://localhost:5000/api/product/create', formData, {
                 headers: {
-                        Authorization: `Bearer ${cookie.get('access_token')}`
+                    Authorization: `Bearer ${cookie.get('access_token')}`
                 }
             });
 
-            if(data.error) {
+            console.log(data)
+
+            if (data.error) {
                 setMessage(data.error)
                 setError(true)
                 setLoading(false)
@@ -114,9 +125,9 @@ export const AppProvider = ({children}) => {
     const getProduct = async (id) => {
         setLoading(true);
         try {
-            const {data} = await axios.get(`http://localhost:5000/api/product/${id}`);
-            
-            if(data.error) {
+            const { data } = await axios.get(`http://localhost:5000/api/product/${id}`);
+
+            if (data.error) {
                 setMessage(data.error)
                 setError(true);
                 setLoading(false)
@@ -141,6 +152,24 @@ export const AppProvider = ({children}) => {
         }
     }
 
+    const removeProduct = async (id) => {
+        try {
+            const { data } = await axios.delete(`http://localhost:5000/api/product/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${cookie.get('access_token')}`
+                }
+            });
+            console.log(data)
+            if(data.error) {
+                setError(data.error);
+                return;
+            }
+            // dispatch({ type: 'PRODUCT_REMOVE', payload: data.message});
+        } catch (error) {
+
+        }
+    }
+
     // useEffect(() => {
     //     fetchData();
     // }, [])
@@ -152,13 +181,12 @@ export const AppProvider = ({children}) => {
     // useEffect(() => {
     //     localStorage.setItem('cart', JSON.stringify(state.cart));
     // }, [state.cart])
-    
-    
-    return <AppContext.Provider value={{ 
-        loading, 
-        products, 
-        error, 
-        categories, 
+
+
+    return <AppContext.Provider value={{
+        loading,
+        error,
+        categories,
         success,
         message,
         product,
@@ -166,9 +194,12 @@ export const AppProvider = ({children}) => {
         // fetchCategories,
         // fetchData,
         getProduct,
+        getProducts,
+        removeProduct,
+        ...state
         // ...state,
         // addToCart
-        }}>
+    }}>
         {children}
     </AppContext.Provider>
 }

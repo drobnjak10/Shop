@@ -91,6 +91,14 @@ export const CartProvider = ({children}) => {
         }
     }
 
+    const clearCart = async () => {
+        try {
+            dispatch({ type: 'CART_RESET_ALL' });
+        } catch (error) {
+            
+        }
+    }
+
     useEffect(() => {
         localStorage.setItem('cart', JSON.stringify(state.cart));
     },[state.cart]);
@@ -113,7 +121,8 @@ export const CartProvider = ({children}) => {
         saveShippingAddress,
         savePaymentMethod,
         createOrder,
-        message
+        message,
+        clearCart
     }}>
         {children}
     </CartContext.Provider>

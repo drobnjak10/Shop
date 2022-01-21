@@ -19,11 +19,11 @@ export const AuthProvider = ({ children }) => {
     const [error, setError] = useState(false);
     const [message, setMessage] = useState(false)
     const [success, setSuccess] = useState(false);
-    const [admin, setAdmin] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
     const [user, setUser] = useState({});
 
     const getUserInfo = async () => {
-        setLoading(true);
+        // setLoading(true);
         try {
             const { data } = await axios.get('http://localhost:5000/api/user/me', {
                 headers: {
@@ -92,19 +92,22 @@ export const AuthProvider = ({ children }) => {
             }
             dispatch({ type: "USER_LOGOUT" });
             dispatch({ type: 'CART_RESET_ALL' });
-            setLoading(false)
             cookies.remove('access_token');
+            setLoading(false)
             setAuthed(false)
-            setAdmin(false);
+            setIsAdmin(false);
             setUser({})
+            document.location.reload('/')
         } catch (error) {
             setError(error.message);
             setAuthed(false)
         }
     }
 
+
+
     useEffect(() => {
-        if(!cookies.get('access_token')) {
+        if (!cookies.get('access_token')) {
             setAuthed(false);
         }
 
@@ -122,17 +125,16 @@ export const AuthProvider = ({ children }) => {
     }, [])
 
     useEffect(() => {
-        if(user && user.role === 'admin') {
-            setAdmin(true);
+        if (user && user.role === 'admin') {
+            setIsAdmin(true);
         }
-    },[user])
+    }, [user])
 
     useEffect(() => {
         const datum = Date.now() / 1000;
-        if(state.user && state.user.exp && state.user.exp < datum ) {
+        if (state.user && state.user.exp && state.user.exp < datum) {
             logout();
         }
-        console.log(state)
     }, [state])
 
     return <AuthContext.Provider value={{
@@ -140,7 +142,7 @@ export const AuthProvider = ({ children }) => {
         loading,
         error,
         authed,
-        admin,
+        isAdmin,
         logout,
         success,
         message

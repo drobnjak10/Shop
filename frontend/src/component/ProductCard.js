@@ -1,8 +1,20 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { MdDangerous } from 'react-icons/md';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { AuthConsumer } from '../AuthContext';
+import { useAppContext } from '../context';
 
 function ProductCard({ product }) {
-    const { name, price, avatar, category, stock, sale, description } = product;
+    const { _id, name, price, avatar, category, stock, sale, description } = product;
+    const {isAdmin} = AuthConsumer();
+    const {removeProduct} = useAppContext();
+    const navigate = useNavigate('/');
+    
+    const removeHandler = () => {
+        removeProduct(_id);
+        navigate('/');
+    }
 
     return (
         <div className="card mt-5">
@@ -31,7 +43,12 @@ function ProductCard({ product }) {
                         </p>
                     </div>
                     <button className="btn btn-primary rounded">Add To Cart</button>
+                   { isAdmin &&  <div className="card-footer mt-5">
+                        <button className="btn btn-warning rounded me-2">Edit</button>
+                        <button className="btn btn-danger rounded" onClick={removeHandler}>Delete</button>
+                    </div> }
                 </div>
+                
             </div>
         </div>
     )

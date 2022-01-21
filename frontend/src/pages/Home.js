@@ -11,25 +11,14 @@ import { useCartContext } from '../CartContext';
 
 function Home() {
     const { cart } = useAppContext();
-    const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const { message } = useCartContext();
+    const {products, getProducts} = useAppContext(); 
 
 
     useEffect(() => {
-        const getProducts = async () => {
-            setLoading(true)
-            try {
-                const { data } = await axios.get('http://localhost:5000/api/product');
-                setProducts(data.products);
-                setLoading(false)
-            } catch (error) {
-                setError(error.message);
-                setLoading(false)
-            }
-        }
         getProducts();
     }, [])
 
@@ -47,7 +36,7 @@ function Home() {
             }
         }
         getCategories()
-    }, [])
+    }, [products])
 
 
 

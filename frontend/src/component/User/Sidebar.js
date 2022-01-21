@@ -1,8 +1,11 @@
 import React from 'react'
 import { AiFillDashboard } from 'react-icons/ai'
 import { Link } from 'react-router-dom'
+import { AuthConsumer } from '../../AuthContext'
 
 function Sidebar() {
+    const {isAdmin} = AuthConsumer();
+    
     return (
         <div className="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style={{ height: "100%" }}>
             <a href="/" className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
@@ -25,11 +28,13 @@ function Sidebar() {
                         Products
                     </Link>
                 </li>
-                <li>
+
+                { isAdmin &&  <li>
                     <Link to="/dashboard/new" className="nav-link text-white">
                         New Item
                     </Link>
-                </li>
+                </li> }
+                
                 <li>
                     <Link to="/dashboard" className="nav-link text-white">
                         Customers

@@ -6,7 +6,7 @@ import SignIn from './pages/SignIn';
 import { AuthConsumer } from './AuthContext';
 import Dashboard from './pages/Dashboard';
 import NewProduct from './pages/DashboardMenu/NewProduct';
-import {useAlert} from 'react-alert'
+import { useAlert } from 'react-alert'
 import ProductDetails from './pages/ProductDetails';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
@@ -14,7 +14,7 @@ import PaymentMethod from './pages/PaymentMethod';
 import PlaceOrder from './pages/PlaceOrder';
 
 function App() {
-  const { authed, admin } = AuthConsumer();
+  const { authed, isAdmin } = AuthConsumer();
 
   return (
     <Router>

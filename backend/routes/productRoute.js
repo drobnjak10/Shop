@@ -44,6 +44,6 @@ const router = new express.Router();
 router.post('/create', isAuth, authorizeRoles,  create);
 router.get('/', getAll);
 router.get('/:id', getOne);
-router.delete('/:id', isAuth, deleteOne);
+router.delete('/:id', isAuth, authorizeRoles, deleteOne);
 
 module.exports = router;
