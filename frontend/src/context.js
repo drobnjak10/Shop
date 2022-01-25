@@ -82,9 +82,9 @@ export const AppProvider = ({ children }) => {
     //     }
     // }
 
-    const getProducts = async () => {
+    const getProducts = async (niz = []) => {
         try {
-            const { data } = await axios.get('http://localhost:5000/api/product');
+            const { data } = await axios.get(niz && niz.length > 0  ? `http://localhost:5000/api/product?cat=${niz}` : 'http://localhost:5000/api/product' )
             dispatch({ type: 'GET_PRODUCTS', payload: data.products });
         } catch (error) {
             setError(error.message);

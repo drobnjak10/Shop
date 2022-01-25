@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './Home.css'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
@@ -8,6 +8,7 @@ import Product from '../component/Product';
 import { AuthConsumer } from '../AuthContext';
 import FlashMsg from '../component/FlashMessage';
 import { useCartContext } from '../CartContext';
+import CategoryItem from '../component/CategoryItem';
 
 function Home() {
     const { cart } = useAppContext();
@@ -15,6 +16,9 @@ function Home() {
     const [loading, setLoading] = useState(false);
     const { message } = useCartContext();
     const {products, getProducts, getCategories, categories} = useAppContext(); 
+    const [categoryId, setCategoryId] = useState([]);
+    const checkBoxRef = useRef();
+    
 
 
     useEffect(() => {
@@ -22,9 +26,17 @@ function Home() {
         getCategories()
     }, [])
 
+    const clickHandler = (id) => {
+        console.log('hell')
+        setCategoryId([...categoryId, id])
+        const niz = categoryId.filter(it => it._id !== id);
+        console.log('niz', niz)
+        console.log(checkBoxRef.current)
+    }
 
     useEffect(() => {
-    }, [])
+        getProducts(categoryId)
+    },[categoryId])
 
 
 
@@ -51,10 +63,12 @@ function Home() {
                         <div className="list">
                             {categories && categories.length > 0 && categories.map(cat => {
                                 const { category } = cat;
-                                return <div key={category._id}>
-                                    <input type="radio" name='category' />
-                                    <label htmlFor="">{category.name}</label>
-                                </div>
+                               
+                                return <CategoryItem category={category} categoryId={categoryId} setCategoryId={setCategoryId} />
+                                // return <div key={category._id}>
+                                //     <input type="radio" name='category' onChange={e => handleChange(category._id)} />
+                                //     <label htmlFor="">{category.name}</label>
+                                // </div>
                             })}
                         </div>
                     </aside>

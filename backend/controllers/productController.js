@@ -134,7 +134,43 @@ exports.getOne = async (req, res) => {
 
 exports.getAll = async (req, res) => {
     try {
-        const products = await Product.find().populate('category').exec();
+        let products = await Product.find().populate('category').exec();
+        // if(req.query.cat) {
+        //     console.log(req.query.cat)
+        //     products = await Product.find({ category: req.query.cat });
+        // }
+       
+
+        if(req.query.cat !== undefined) {
+            var kats = req.query.cat.split(',')
+
+                if(kats.length === 1) {
+                    console.log(req.query.cat)
+                    products = await Product.find({ category: kats[0] });
+                }
+
+                if(kats.length > 1) {
+                    products = await Product.find({ category: { $in: kats } });
+                }
+
+        // console.log('kat', kat);
+        // console.log('kat', kat.length);
+        }
+        // if(req.query.cat) {
+        //     var nizIds = req.query.cat.split(',');
+        //     console.log(ids, 'ids');
+        //     if(nizIds && nizIds.length > 0) {
+        //         // products = await Product.find({ category: req.query.cat});
+    
+        //         products = await Product.find({ category: { $in: nizIds } });
+        //     }
+        // }
+
+        
+
+        // console.log(products)
+     
+
 
         res.json({ products })
     } catch (error) {
