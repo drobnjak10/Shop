@@ -107,6 +107,8 @@ export const AuthProvider = ({ children }) => {
             setLoading(false)
             setAuthed(false)
             setIsAdmin(false);
+            window.location = '/signin';
+            // document.location.replace('/')
             // document.location.reload('/')
         } catch (error) {
             setError(error.message);

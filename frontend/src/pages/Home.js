@@ -36,7 +36,7 @@ function Home() {
         <section className="container">
             <div className="row mt-5">
                 {message && <FlashMsg type={'success'} msg={message} />}
-                <div className="col-lg-3">
+                <div className="col-lg-3 col-md-2">
                     <aside>
                         {error ? <div className="alert alert-danger">{error}</div> : ''}
                         <label className='title'>Order By</label>
@@ -59,7 +59,7 @@ function Home() {
                         </div>
                     </aside>
                 </div>
-                <div className="col-lg-9 d-flex justify-space-between">
+                <div className="col-lg-9 col-md-10 justify-space-between">
                     <div className="row">
                         {products.map(product => {
                             return <Product product={product} key={product._id} />

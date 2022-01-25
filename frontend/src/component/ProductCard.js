@@ -4,16 +4,25 @@ import { MdDangerous } from 'react-icons/md';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { AuthConsumer } from '../AuthContext';
 import { useAppContext } from '../context';
+import FlashMsg from './FlashMessage';
 
 function ProductCard({ product }) {
     const { _id, name, price, avatar, category, stock, sale, description } = product;
     const {isAdmin} = AuthConsumer();
     const {removeProduct} = useAppContext();
     const navigate = useNavigate('/');
+    const [success, setSuccess] = useState(false)
+
     
     const removeHandler = () => {
-        removeProduct(_id);
-        navigate('/');
+        const hah = window.confirm('Are you sure?')
+        if (hah) {
+            setSuccess(true);
+            removeProduct(_id);
+            setTimeout(() => {
+                navigate('/')
+            }, 2000)
+        }
     }
 
     return (
@@ -27,6 +36,7 @@ function ProductCard({ product }) {
                     />
                 </div>
                 <div className="col-md-5 mt-5">
+                    {success && <FlashMsg type='danger' msg={'Product deleted successfully. You will be redirect soon.'} /> }
                     <h2>{name}</h2>
                     <span className='bg-danger text-white p-1 rounded '>bestseller</span>
                     {/* {isAvaliable ? <span className='bg-success text-white p-1 rounded '>avaliable</span>

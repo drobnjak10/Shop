@@ -11,7 +11,7 @@ function Product({product}) {
     
     
     return (
-        <div className="col-4 mb-3" key={_id}>
+        <div className="col-md-4 mb-3" key={_id}>
             <div className="card" style={{ width: "18rem" }}>
                     <img src={`images/products/${avatar}`} className="card-img-top" alt="..." style={{ maxWidth: "18rem" }} />
                     <div className="card-body">

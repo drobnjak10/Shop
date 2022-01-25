@@ -4,6 +4,7 @@ import Sidebar from '../../component/User/Sidebar';
 import { useAppContext } from '../../context';
 import Loading from '../../component/Loading';
 import axios from 'axios';
+import FlashMsg from '../../component/FlashMessage';
 
 function NewProduct() {
     const [name, setName] = useState('');
@@ -31,6 +32,10 @@ function NewProduct() {
         formData.set('avatar', avatar)
      
         addProduct(formData);
+
+        setTimeout(() => {
+            navigate('/')
+        }, 3000)
     }
 
     const changeHandler = (e) => {
@@ -52,15 +57,6 @@ function NewProduct() {
         getCategories()
     },[])
 
-
-    // if(loading) {
-    //     return <Loading />
-    // }
-
-    if(success) {
-        console.log(success)
-    }
-
     return (
         <div className="container bg-dark mt-5">
             <div className="row">
@@ -72,7 +68,7 @@ function NewProduct() {
                         <div className="row d-flex justify-content-center align-items-center" >
                             <div className="col-6 text-white">
                                 {creatError && <div className="alert alert-danger">{message}</div> }
-                                {success && <div className="alert alert-success">{message}</div> }
+                                {success && <FlashMsg type="success" msg={'Product created successfully.'} /> }
                                 <form onSubmit={handleSubmit} >
                                     <div className="mb-3">
                                         <label htmlFor='' className="form-label">Name</label>
