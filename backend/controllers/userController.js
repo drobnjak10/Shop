@@ -42,7 +42,6 @@ exports.login = async (req,res) => {
             return res.json({ error: "User with this email does not exist."  })
         };
 
-        console.log(user);
 
         const isMatched = await bcrypt.compare(password, user.password);
         
@@ -65,7 +64,6 @@ exports.myProfile = async (req,res) => {
     try {
         // const user = await User.findById(req.user._id);
         const user = req.user;
-        console.log('req', req.user);
         const vreme = new Date(req.user.exp * 1000);
         // req.json({ 
         //     user: { 
@@ -76,7 +74,6 @@ exports.myProfile = async (req,res) => {
         //         exp: vreme
         //     } 
         // })
-        console.log(req.user.exp);
         res.json({ user: { username: user.username, email: user.email, _id: user._id, role: user.role, exp: user.exp } });
     } catch (error) {
         res.json({error:error.message})
@@ -85,6 +82,5 @@ exports.myProfile = async (req,res) => {
 
 
 exports.logout = async (req,res) => {
-    console.log(res.cookie('access_token'));
     res.clearCookie("access_token").json({ message: 'Successfully logged out.' });
 }

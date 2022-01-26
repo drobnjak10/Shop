@@ -38,6 +38,5 @@ exports.authorizeRoles = async (req, res, next) => {
         return res.json({ error: `Role: ${req.user.role} is not allowed to access this resouce` });
     }
 
-    console.log(token);
     next();
 }

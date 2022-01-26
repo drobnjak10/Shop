@@ -15,10 +15,10 @@ function Home() {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const { message } = useCartContext();
-    const {products, getProducts, getCategories, categories} = useAppContext(); 
+    const { products, getProducts, getCategories, categories } = useAppContext();
     const [categoryId, setCategoryId] = useState([]);
     const checkBoxRef = useRef();
-    
+
 
 
     useEffect(() => {
@@ -36,7 +36,8 @@ function Home() {
 
     useEffect(() => {
         getProducts(categoryId)
-    },[categoryId])
+
+    }, [categoryId])
 
 
 
@@ -53,6 +54,10 @@ function Home() {
                         {error ? <div className="alert alert-danger">{error}</div> : ''}
                         <label className='title'>Order By</label>
                         <ul className="list-group">
+                            {/* <li>
+                                <input type="checkbox" />
+                                <label htmlFor="">Average Rating</label>
+                            </li> */}
                             <li>Default</li>
                             <li>Poplarity</li>
                             <li>Average Rating</li>
@@ -63,8 +68,9 @@ function Home() {
                         <div className="list">
                             {categories && categories.length > 0 && categories.map(cat => {
                                 const { category } = cat;
-                               
-                                return <CategoryItem category={category} categoryId={categoryId} setCategoryId={setCategoryId} />
+
+                                // return <CategoryItem category={category}  key={category._id} categoryId={categoryId} setCategoryId={setCategoryId} />
+                                return <CategoryItem category={category} key={category._id} categoryId={categoryId} setCategoryId={setCategoryId} />
                                 // return <div key={category._id}>
                                 //     <input type="radio" name='category' onChange={e => handleChange(category._id)} />
                                 //     <label htmlFor="">{category.name}</label>

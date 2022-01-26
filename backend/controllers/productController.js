@@ -2,7 +2,8 @@ const Product = require("../models/Product");
 const multer = require('multer');
 const path = require("path");
 const _dirname = path.resolve(path.dirname(''));
-const fs = require('fs')
+const fs = require('fs');
+const ApiFeatures = require("../utils/apiFeatures");
 // const upload = multer({
 //     // dest:'avatars',
 //     limits: {
@@ -134,45 +135,53 @@ exports.getOne = async (req, res) => {
 
 exports.getAll = async (req, res) => {
     try {
-        let products = await Product.find().populate('category').exec();
+
+
+        const resultPerPage = 8;
+        const productsCount = await Product.countDocuments();
+
+        console.log(req.query)
+
+        const apiFeature = new ApiFeatures(Product.find().populate('category'), req.query)
+            .search()
+            .filter();
+
+        // let products = await Product.find().populate('category').exec();
+        let products = await apiFeature.query;
+
+        let filteredProductsCount = products.length;
+
+        apiFeature.pagination(resultPerPage);
+
+        products = await apiFeature.query.clone();
+        // let produkti = await apiFeature.query;
         // if(req.query.cat) {
         //     console.log(req.query.cat)
         //     products = await Product.find({ category: req.query.cat });
         // }
-       
 
-        if(req.query.cat !== undefined) {
-            var kats = req.query.cat.split(',')
 
-                if(kats.length === 1) {
-                    console.log(req.query.cat)
-                    products = await Product.find({ category: kats[0] });
-                }
+        // if (req.query.cat !== undefined) {
+        //     var kats = req.query.cat.split(',')
 
-                if(kats.length > 1) {
-                    products = await Product.find({ category: { $in: kats } });
-                }
+        //     if (kats.length === 1) {
+        //         console.log(req.query.cat)
+        //         products = await Product.find({ category: kats[0] });
+        //     }
 
-        // console.log('kat', kat);
-        // console.log('kat', kat.length);
-        }
-        // if(req.query.cat) {
-        //     var nizIds = req.query.cat.split(',');
-        //     console.log(ids, 'ids');
-        //     if(nizIds && nizIds.length > 0) {
-        //         // products = await Product.find({ category: req.query.cat});
-    
-        //         products = await Product.find({ category: { $in: nizIds } });
+        //     if (kats.length > 1) {
+        //         products = await Product.find({ category: { $in: kats } });
         //     }
         // }
 
-        
-
-        // console.log(products)
-     
+        console.log(req.query.keyword);
 
 
-        res.json({ products })
+        res.json({
+            products, productsCount,
+            resultPerPage,
+            filteredProductsCount,
+        })
     } catch (error) {
         res.json({ error: error.message })
     }
@@ -218,25 +227,44 @@ exports.editOne = async (req, res) => {
 
             const putanja = path.join(__dirname, '../../frontend/public/images/products');
 
-            
-            
+
+
             console.log(req.file);
             const avatarPath = req.file ? req.file.filename : req.body.avatar
-            const product = await Product.findByIdAndUpdate(req.body._id, { 
-                name : req.body.name,
-                price : req.body.price,
-                stock : req.body.stock,
-                description : req.body.description,
-                category : req.body.category,
-                avatar : avatarPath}, {new: true});
-                
-                console.log(product)
-                await product.save();
-                fs.unlinkSync(`${putanja}/${oldProduct.avatar}`);
+            const product = await Product.findByIdAndUpdate(req.body._id, {
+                name: req.body.name,
+                price: req.body.price,
+                stock: req.body.stock,
+                description: req.body.description,
+                category: req.body.category,
+                avatar: avatarPath
+            }, { new: true });
+
+            console.log(product)
+            await product.save();
+            fs.unlinkSync(`${putanja}/${oldProduct.avatar}`);
 
             res.json({ message: "Edited successfully", product })
         });
     } catch (error) {
+        res.json({ error: error.message })
+    }
+}
+
+exports.createReview = async (req, res) => {
+    try {
+        var product = await Product.findById(req.params.id);
+        console.log(req.body)
+
+        if (req.body.stars) {
+            product.numReviews += 1;
+            product.rating = (product.rating + req.body.stars) / product.numReviews;
+        }
+
+        await product.save();
+        res.json({ message: 'Thanks for review!' });
+    } catch (error) {
+        console.log('err')
         res.json({ error: error.message })
     }
 }

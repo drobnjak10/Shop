@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 
-function CategoryItem({category, categoryId, setCategoryId}) {
+function CategoryItem({setAverage}) {
     const [isChecked, setIsChecked] = useState(true);
     const checkBoxRef = useRef();
 
@@ -8,11 +8,11 @@ function CategoryItem({category, categoryId, setCategoryId}) {
         setIsChecked(!isChecked)
         
         if(checkBoxRef.current.value !== 'no') {
-            setCategoryId([...categoryId, id])
+            setAverage(id)
         }
         
         if(checkBoxRef.current.value !== 'yes') {
-            setCategoryId([...categoryId.filter(cat => cat !== id)])
+            setAverage(null)
         }
     }
 
@@ -21,11 +21,10 @@ function CategoryItem({category, categoryId, setCategoryId}) {
     return <div>
         <input type="checkbox" 
         value={isChecked ? 'yes' : 'no'} 
-        name='category' ref={checkBoxRef} 
-        onClick={e => clickHandler(category._id) }
-        id={category._id}
+        name='average' ref={checkBoxRef} 
+        onClick={e => clickHandler() }
         />
-        <label htmlFor="">{category.name}</label>
+        <label htmlFor="">Average</label>
     </div>
 }
 export default CategoryItem;

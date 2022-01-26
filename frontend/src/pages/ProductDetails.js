@@ -16,6 +16,7 @@ function ProductDetails() {
             setLoading(false);
         }
         // console.log(params)
+        console.log(product, 'prr');
     }, []);
 
     if(loading) {

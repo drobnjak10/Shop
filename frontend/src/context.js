@@ -82,9 +82,23 @@ export const AppProvider = ({ children }) => {
     //     }
     // }
 
-    const getProducts = async (niz = []) => {
+    const getProducts = async (category, price = [0, 25000], keyword='', currentPage = 1, ratings = 0) => {
         try {
-            const { data } = await axios.get(niz && niz.length > 0  ? `http://localhost:5000/api/product?cat=${niz}` : 'http://localhost:5000/api/product' )
+            let link = `http://localhost:5000/api/product/?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}&ratings[gte]=${ratings}`
+            
+            let finalName = ''
+           
+            for (let i=0; i < category.length; i++) {
+                finalName += `category=${category[i]}&`
+            }
+
+
+            if (category) {
+                // link = `http://localhost:5000/api/product/?category=${category}`
+                link = `http://localhost:5000/api/product/?${finalName}`
+            }
+            // const { data } = await axios.get(niz && niz.length > 0  ? `http://localhost:5000/api/product?cat=${niz}` : 'http://localhost:5000/api/product' )
+            const { data } = await axios.get(link)
             dispatch({ type: 'GET_PRODUCTS', payload: data.products });
         } catch (error) {
             setError(error.message);
@@ -140,7 +154,9 @@ export const AppProvider = ({ children }) => {
                 sale: data.product.sale,
                 price: data.product.price,
                 avatar: data.product.avatar,
-                description: data.product.description
+                description: data.product.description,
+                rating: data.product.rating,
+                numOfRevies: data.product.numReviews
             })
             setError(false)
             setLoading(false)
@@ -199,6 +215,19 @@ export const AppProvider = ({ children }) => {
         }
     }
 
+    const createReview = async (id, stars) => {
+        try {
+            const {data} = await axios.post(`http://localhost:5000/api/product/rating/create/${id}`, {stars}, {
+                headers: {
+                    Authorization: `Bearer ${cookie.get('access_token')}`
+                }
+            })
+            console.log(data)
+        } catch (error) {
+            
+        }
+    }
+
     // useEffect(() => {
     //     fetchData();
     // }, [])
@@ -227,6 +256,7 @@ export const AppProvider = ({ children }) => {
         removeProduct,
         editProduct,
         getCategories,
+        createReview,
         ...state
         // ...state,
         // addToCart
